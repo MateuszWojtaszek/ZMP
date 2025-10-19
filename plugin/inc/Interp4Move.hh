@@ -1,9 +1,9 @@
-#ifndef  COMMAND4MOVE_HH
-#define  COMMAND4MOVE_HH
+#ifndef COMMAND4MOVE_HH
+#define COMMAND4MOVE_HH
 
 #ifndef __GNUG__
-# pragma interface
-# pragma implementation
+#pragma interface
+#pragma implementation
 #endif
 
 #include "AbstractInterp4Command.hh"
@@ -20,18 +20,20 @@
  *
  *  Klasa modeluj47e ...
  */
-class Interp4Move: public AbstractInterp4Command {
+class Interp4Move : public AbstractInterp4Command
+{
   /*
    *  Tu należy zdefiniować pola, które są niezbędne
    *  do przechowywania wartości parametrów danego polecenia.
    *  Ponieżej zdefiniowane jest tylko jedno pole jako przykład.
    */
-  double  _Speed_mmS;
- public:
+  double _Speed_mmS;
+
+public:
   /*!
    * \brief
    */
-  Interp4Move();  
+  Interp4Move();
   /*!
    * \brief Wyświetla postać bieżącego polecenia (nazwę oraz wartości parametrów)
    */
@@ -43,12 +45,12 @@ class Interp4Move: public AbstractInterp4Command {
   /*!
    * \brief Wyświetla wartości wczytanych parametrów
    */
-  virtual void PrintParams() const override {} 
+  virtual void PrintParams() const override {}
 
   /*!
    * \brief Wyświetla nazwę polecenia
    */
-  virtual const char* GetCmdName() const override;
+  virtual const char *GetCmdName() const override;
 
   /*!
    * \brief Wykonuje polecenie oraz wizualizuje jego realizację
@@ -60,21 +62,20 @@ class Interp4Move: public AbstractInterp4Command {
    * \retval true - operacja powiodła się,
    * \retval false - w przypadku przeciwnym.
    */
-  virtual bool ExecCmd( AbstractScene      &rScn, 
-                        const char         *sMobObjName,
-                        AbstractComChannel &rComChann ) override;
+  virtual bool ExecCmd(AbstractScene &rScn,
+                       const char *sMobObjName,
+                       AbstractComChannel &rComChann) override;
   /*!
    * \brief Czyta wartości parametrów danego polecenia
    */
-  virtual bool ReadParams(std::istream& Strm_CmdsList) override;
+  virtual bool ReadParams(std::istream &Strm_CmdsList) override;
 
-  
   /*!
    * \brief
    *
    *  Ta metoda nie musi być zdefiniowna w klasie bazowej.
    */
-  static AbstractInterp4Command* CreateCmd();
- };
+  static AbstractInterp4Command *CreateCmd();
+};
 
 #endif

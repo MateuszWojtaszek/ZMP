@@ -10,10 +10,6 @@
  * \date        2003.12
  *
  */
-
-#ifdef __GNUG__
-#pragma interface
-#endif
 #include <iostream>
 #include <cmath>
 #include <cassert>
