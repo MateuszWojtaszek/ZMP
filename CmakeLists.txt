@@ -1,14 +1,9 @@
-# Wymagana minimalna wersja CMake
 cmake_minimum_required(VERSION 3.10.0)
 
-# Ustawienia projektu
 project(InterpreterProject VERSION 0.1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# -----------------------------------------------------------------------------
-# SEKCJA TRYBU DEBUG / RELEASE (BEZ ZMIAN)
-# -----------------------------------------------------------------------------
 option(BUILD_IN_DEBUG_MODE "Compile with debug flags" ON)
 
 if(BUILD_IN_DEBUG_MODE)
@@ -19,17 +14,8 @@ else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG")
 endif()
 
-# -----------------------------------------------------------------------------
-
-# --- ZMIANA: Usunięto CMAKE_LIBRARY_OUTPUT_DIRECTORY ---
-# Już nie ustawiamy ścieżki wyjściowej dla bibliotek na stałe.
-# Domyślnie CMake umieści wszystko wewnątrz katalogu 'build', co jest
-# najlepszą praktyką i utrzymuje porządek w projekcie.
-
-# Dodajemy podkatalog z pluginem do procesu budowania
 add_subdirectory(plugin)
 
-# Tworzymy plik wykonywalny "interp"
 add_executable(interp src/main.cpp)
 
 # Dodajemy katalog "inc" do ścieżek include
@@ -38,9 +24,6 @@ target_include_directories(interp PUBLIC inc)
 # Linkujemy bibliotekę 'dl' (niezbędna do dynamicznego ładowania pluginów)
 target_link_libraries(interp PRIVATE dl)
 
-# -----------------------------------------------------------------------------
-# SEKCJA FLAG OSTRZEŻEŃ (BEZ ZMIAN)
-# -----------------------------------------------------------------------------
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(interp PRIVATE
         -Wall -Wextra -Wpedantic -Wshadow -Wformat=2
@@ -52,8 +35,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_compile_options(interp PRIVATE /W4 /WX)
 endif()
 
-# -----------------------------------------------------------------------------
-
 # --- ZMIANA: Poprawione ustawienie RPATH ---
 # Ustawiamy RPATH tak, aby program 'interp' uruchamiany z katalogu 'build'
 # automatycznie znalazł bibliotekę .so w podkatalogu 'build/plugin'.
@@ -62,7 +43,7 @@ set_target_properties(interp PROPERTIES
 )
 
 # -----------------------------------------------------------------------------
-# NOWA SEKCJA: Integracja z Doxygen
+# Integracja z Doxygen
 # -----------------------------------------------------------------------------
 find_package(Doxygen)
 
@@ -85,7 +66,7 @@ endif()
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-# NOWA SEKCJA: Ulepszone cele pomocnicze i czyszczące
+# Ulepszone cele pomocnicze i czyszczące
 # -----------------------------------------------------------------------------
 add_custom_target(show_help
     COMMAND ${CMAKE_COMMAND} -E echo "Dostępne cele:"
