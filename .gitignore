@@ -1,0 +1,33 @@
+# Pliki i katalogi generowane przez CMake
+# Najważniejsze - ignoruje cały katalog z wynikami kompilacji
+build/
+
+# Stare katalogi z poprzedniego systemu budowania (Makefile, IDE)
+obj/
+plugin/obj/
+out/
+libs/
+dox/
+
+# Plik wykonywalny w katalogu głównym (jeśli się pojawi)
+interp
+
+# Dokumentacja generowana przez Doxygen
+dox/doc/
+dox/doxy.log
+
+# Pliki konfiguracyjne popularnych edytorów i IDE
+.vscode/
+.idea/
+
+# Pliki zrzutu pamięci (core dumps)
+core*
+
+# Pliki tymczasowe i kopie zapasowe popularnych edytorów (np. Vim, Emacs)
+*~
+*.swp
+*.swo
+
+# Pliki systemowe
+.DS_Store
+Thumbs.db
