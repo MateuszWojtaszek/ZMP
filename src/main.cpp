@@ -2,12 +2,14 @@
 #include <dlfcn.h>
 #include <cassert>
 #include "AbstractInterp4Command.hh"
-
-using namespace std;
+// instead of using namespace std
+using std::cerr;
+using std::cin;
+using std::cout;
+using std::endl;
 
 int main()
 {
-  // Gdzieś na początku pliku, gdzie definiujesz nazwę biblioteki
 #if defined(__APPLE__)
   const char *lib_name = "libInterp4Move.dylib";
 #elif defined(__linux__)
@@ -15,9 +17,19 @@ int main()
 #else
 #error "Unsupported platform"
 #endif
+  auto libHandlerDeleter = [](void *libPtr)
+  {
+    if (libPtr)
+    {
+      dlclose(libPtr);
+    }
+  };
 
-  void *pLibHnd_Move = dlopen(lib_name, RTLD_LAZY);
-  AbstractInterp4Command *(*pCreateCmd_Move)(void);
+  std::unique_ptr<void, decltype(libHandlerDeleter)>
+      pLibHnd_Move(dlopen(lib_name, RTLD_LAZY), libHandlerDeleter);
+
+  using createCmdFunctionPtr = AbstractInterp4Command *(*)(void);
+  createCmdFunctionPtr pCreateCmd_Move;
   void *pFun;
 
   if (!pLibHnd_Move)
@@ -26,16 +38,15 @@ int main()
     return 1;
   }
 
-  pFun = dlsym(pLibHnd_Move, "CreateCmd");
+  pFun = dlsym(pLibHnd_Move.get(), "CreateCmd");
   if (!pFun)
   {
     cerr << "!!! Nie znaleziono funkcji CreateCmd" << endl;
     return 1;
   }
-  pCreateCmd_Move = reinterpret_cast<AbstractInterp4Command *(*)(void)>(pFun);
+  pCreateCmd_Move = reinterpret_cast<createCmdFunctionPtr>(pFun);
 
-  AbstractInterp4Command *pCmd = pCreateCmd_Move();
-
+  std::unique_ptr<AbstractInterp4Command> pCmd(pCreateCmd_Move());
   cout << endl;
   cout << pCmd->GetCmdName() << endl;
   cout << endl;
@@ -43,8 +54,4 @@ int main()
   cout << endl;
   pCmd->PrintCmd();
   cout << endl;
-
-  delete pCmd;
-
-  dlclose(pLibHnd_Move);
 }
