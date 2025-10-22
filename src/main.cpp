@@ -73,7 +73,6 @@ int main() {
   cout << endl;
   //****************************TEST Rotate***********************
   LibInterface rotate("libInterp4Rotate.dylib");
-  using createCmdFunctionPtr = AbstractInterp4Command* (*)(void);
   createCmdFunctionPtr pCreateCmd_Rotate = rotate.getCreatedCmd();
   std::unique_ptr<AbstractInterp4Command> pCmd_rotate(pCreateCmd_Rotate());
   cout << endl;
@@ -82,5 +81,15 @@ int main() {
   pCmd_rotate->PrintSyntax();
   cout << endl;
   pCmd_rotate->PrintCmd();
+  cout << endl;
+  LibInterface pause("libInterp4Pause.dylib");
+  createCmdFunctionPtr pCreateCmd_Pause = pause.getCreatedCmd();
+  std::unique_ptr<AbstractInterp4Command> pCmd_pause(pCreateCmd_Pause());
+  cout << endl;
+  cout << pCmd_pause->GetCmdName() << endl;
+  cout << endl;
+  pCmd_pause->PrintSyntax();
+  cout << endl;
+  pCmd_pause->PrintCmd();
   cout << endl;
 }
