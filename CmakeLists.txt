@@ -16,7 +16,7 @@ endif()
 
 add_subdirectory(plugin)
 
-add_executable(interp src/main.cpp)
+add_executable(interp src/main.cpp src/ppf.cpp src/LibInterface.cpp)
 
 # Dodajemy katalog "inc" do ścieżek include
 target_include_directories(interp PUBLIC inc)

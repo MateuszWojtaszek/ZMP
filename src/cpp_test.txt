@@ -1,0 +1,4 @@
+#define TAB_SIZE 10
+int test() {
+  int tab[TAB_SIZE];
+}

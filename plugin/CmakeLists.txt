@@ -1,29 +1,42 @@
-# Tworzymy bibliotekę współdzieloną (.so)/(.dylib) o nazwie "Interp4Move"
-add_library(Interp4Move SHARED src/Interp4Move.cpp)
+# 1. Automatycznie znajdź wszystkie pliki .cpp w katalogu 'src'.
+# Każdy plik .cpp będzie traktowany jako oddzielna wtyczka.
+file(GLOB PLUGIN_SOURCES src/*.cpp)
 
-# Dodajemy katalog "inc" (wewnątrz pluginu) do ścieżek include
-target_include_directories(Interp4Move PUBLIC inc)
+# 2. Przejdź pętlą po każdym znalezionym pliku źródłowym wtyczki
+foreach(PLUGIN_SOURCE ${PLUGIN_SOURCES})
+    # 3. Wyodrębnij nazwę pliku bez ścieżki i rozszerzenia.
+    # Np. dla "src/Interp4Move.cpp" da nam "Interp4Move"
+    get_filename_component(PLUGIN_NAME ${PLUGIN_SOURCE} NAME_WE)
 
-# Dodajemy główny katalog "inc" projektu do ścieżek include
-target_include_directories(Interp4Move PUBLIC ${CMAKE_SOURCE_DIR}/inc)
+    # 4. Utwórz bibliotekę współdzieloną (.so) dla tej konkretnej wtyczki
+    add_library(${PLUGIN_NAME} SHARED ${PLUGIN_SOURCE})
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_compile_options(Interp4Move PRIVATE
-        -fPIC
-        -Wall
-        -Wextra
-        -Wpedantic
-        -Wshadow
-        -Wformat=2
-        -Wunused
-        -Wnull-dereference
-        -Wconversion
-        -Wno-unused-parameter
+    # 5. Ustaw odpowiednie katalogi 'include' dla tej wtyczki
+    target_include_directories(${PLUGIN_NAME} PUBLIC
+        inc # Katalog 'inc' wewnątrz 'plugin'
+        ${CMAKE_SOURCE_DIR}/inc # Główny katalog 'inc' projektu
     )
-endif()
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    target_compile_options(Interp4Move PRIVATE /W4 /WX)
-endif()
+    # 6. Ustaw te same opcje kompilacji, które miałeś wcześniej
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(${PLUGIN_NAME} PRIVATE
+            -fPIC
+            -Wall
+            -Wextra
+            -Wpedantic
+            -Wshadow
+            -Wformat=2
+            -Wunused
+            -Wnull-dereference
+            -Wconversion
+            -Wno-unused-parameter
+        )
+    endif()
 
-# -----------------------------------------------------------------------------
+    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        target_compile_options(${PLUGIN_NAME} PRIVATE /W4 /WX)
+    endif()
+
+    # (Opcjonalnie) Wyświetl informację o znalezionej wtyczce
+    message(STATUS "Configuring plugin: ${PLUGIN_NAME}")
+endforeach()
