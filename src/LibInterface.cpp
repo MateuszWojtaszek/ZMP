@@ -12,13 +12,13 @@ LibInterface::LibInterface(const char* plugin)
   }
   void* tmp_pFun = dlsym(_LibHandler, "CreateCmd");
   if (!tmp_pFun) {
-    dlclose(_LibHandler);  // Zamykamy bibliotekę!
+    dlclose(_LibHandler);
     throw std::runtime_error("Błąd: Brak symbolu 'CreateCmd' w wtyczce.");
   }
   _pCreateCmd = reinterpret_cast<createCmdFunctionPtr>(tmp_pFun);
   void* tmp_cName = dlsym(_LibHandler, "GetCmdName");
   if (!tmp_cName) {
-    dlclose(_LibHandler);  // Zamykamy bibliotekę!
+    dlclose(_LibHandler);
     throw std::runtime_error("Błąd: Brak symbolu 'GetCmdName' w wtyczce.");
   }
   createCmdNamePtr tmp = reinterpret_cast<createCmdNamePtr>(tmp_cName);

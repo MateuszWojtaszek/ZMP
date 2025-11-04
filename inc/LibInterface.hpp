@@ -4,11 +4,12 @@
 #include "AbstractInterp4Command.hh"
 
 class LibInterface {
+  using createCmdFunctionPtr = AbstractInterp4Command* (*)(void);
+  using createCmdNamePtr = const char* (*)();
+
   void* const _LibHandler;
   std::string _CmdName;
-  using createCmdFunctionPtr = AbstractInterp4Command* (*)(void);
   createCmdFunctionPtr _pCreateCmd;
-  using createCmdNamePtr = const char* (*)();
 
  public:
   LibInterface(const char* plugin);

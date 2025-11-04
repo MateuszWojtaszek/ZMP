@@ -1,11 +1,8 @@
-#include <dlfcn.h>
-
-#include <cassert>
 #include <iostream>
-#include <ppf.hpp>
-#include "LibInterface.hpp"
-
 #include "AbstractInterp4Command.hh"
+#include "LibInterface.hpp"
+#include "PluginManager.hpp"
+#include "xmlinterp.hh"
 // instead of using namespace std
 using std::cerr;
 using std::cin;
@@ -27,81 +24,53 @@ int main() {
   //   }
   // }
   //! ************** TEST PREPROCESORA **************//
-#if defined(__APPLE__)
-  const char* lib_name = "libInterp4Move.dylib";
-#elif defined(__linux__)
-  const char* lib_name = "libInterp4Move.so";
-#else
-#error "Unsupported platform"
-#endif
-  // auto libHandlerDeleter = [](void* libPtr) {
-  //   if (libPtr) {
-  //     dlclose(libPtr);
-  //   }
-  // };
 
-  // std::unique_ptr<void, decltype(libHandlerDeleter)> pLibHnd_Move(
-  //     dlopen(lib_name, RTLD_LAZY), libHandlerDeleter);
+  Configuration Config;
 
-  // using createCmdFunctionPtr = AbstractInterp4Command* (*)(void);
-  // createCmdFunctionPtr pCreateCmd_Move;
-  // void* pFun;
+  if (!ReadFile("config/config.xml", Config))
+    return 1;
+  PluginManager manager;
+  for (auto libNames : Config.getAllLibNames()) {
+    manager.addNewPlugin(libNames);
+  }
+  // --- ETAP 2: Pętla testująca menedżera ---
+  std::vector<std::string> commandsToTest = {"Move", "Rotate", "Pause", "Set"};
 
-  // if (!pLibHnd_Move) {
-  //   cerr << "!!! Brak biblioteki: " << lib_name << endl;
-  //   return 1;
-  // }
-
-  // pFun = dlsym(pLibHnd_Move.get(), "CreateCmd");
-  // if (!pFun) {
-  //   cerr << "!!! Nie znaleziono funkcji CreateCmd" << endl;
-  //   return 1;
-  // }
-  // pCreateCmd_Move = reinterpret_cast<createCmdFunctionPtr>(pFun);
-  // std::unique_ptr<AbstractInterp4Command> pCmd(pCreateCmd_Move());
-  //****************************TEST MOVE***********************
-  LibInterface move("libInterp4Move.dylib");
   using createCmdFunctionPtr = AbstractInterp4Command* (*)(void);
-  createCmdFunctionPtr pCreateCmd_Move = move.getCreatedCmd();
-  std::unique_ptr<AbstractInterp4Command> pCmd(pCreateCmd_Move());
-  cout << endl;
-  cout << move.getCmdName() << endl;
-  cout << endl;
-  pCmd->PrintSyntax();
-  cout << endl;
-  pCmd->PrintCmd();
-  cout << endl;
-  //****************************TEST Rotate***********************
-  LibInterface rotate("libInterp4Rotate.dylib");
-  createCmdFunctionPtr pCreateCmd_Rotate = rotate.getCreatedCmd();
-  std::unique_ptr<AbstractInterp4Command> pCmd_rotate(pCreateCmd_Rotate());
-  cout << endl;
-  cout << pCmd_rotate->GetCmdName() << endl;
-  cout << endl;
-  pCmd_rotate->PrintSyntax();
-  cout << endl;
-  pCmd_rotate->PrintCmd();
-  cout << endl;
-  //****************************TEST Pause***********************
-  LibInterface pause("libInterp4Pause.dylib");
-  createCmdFunctionPtr pCreateCmd_Pause = pause.getCreatedCmd();
-  std::unique_ptr<AbstractInterp4Command> pCmd_pause(pCreateCmd_Pause());
-  cout << endl;
-  cout << pCmd_pause->GetCmdName() << endl;
-  cout << endl;
-  pCmd_pause->PrintSyntax();
-  cout << endl;
-  pCmd_pause->PrintCmd();
-  cout << endl;
-  //****************************TEST Set***********************
-  LibInterface set("libInterp4Set.dylib");
-  createCmdFunctionPtr pCreateCmd_Set = set.getCreatedCmd();
-  std::unique_ptr<AbstractInterp4Command> pCmd_set(pCreateCmd_Set());
-  cout << endl;
-  cout << pCmd_set->GetCmdName() << endl;
-  cout << endl;
-  pCmd_set->PrintSyntax();
-  cout << endl;
-  pCmd_set->PrintCmd();
-  cout << endl;
+
+  for (const std::string& cmdName : commandsToTest) {
+    cout << "\n****************************" << endl;
+    cout << "Testowanie polecenia: " << cmdName << endl;
+
+    // 1. Znajdź fabrykę w menedżerze
+    LibInterface* pFactory = manager.getPlugin(cmdName);
+
+    if (pFactory == nullptr) {
+      cerr << "!!! BŁĄD: Nie znaleziono wtyczki dla '" << cmdName << "'"
+           << endl;
+      continue;  // Przejdź do następnego testu
+    }
+
+    // 2. Pobierz funkcję tworzącą
+    createCmdFunctionPtr pCreateCmd = pFactory->getCreatedCmd();
+    if (pCreateCmd == nullptr) {
+      cerr << "!!! BŁĄD: Fabryka dla '" << cmdName
+           << "' nie ma funkcji CreateCmd!" << endl;
+      continue;
+    }
+
+    // 3. Utwórz instancję polecenia (używając unique_ptr dla bezpieczeństwa)
+    std::unique_ptr<AbstractInterp4Command> pCmd(pCreateCmd());
+
+    // 4. Wywołaj metody na poleceniu, aby potwierdzić, że działa
+    cout << "  Nazwa polecenia (z obiektu): " << pCmd->GetCmdName() << endl;
+
+    cout << "  Składnia:" << endl;
+    pCmd->PrintSyntax();
+
+    cout << "  Przykładowe wywołanie:" << endl;
+    pCmd->PrintCmd();
+  }
+  cout << "\n--- Zakończono testowanie ---" << endl;
+  return 0;
 }

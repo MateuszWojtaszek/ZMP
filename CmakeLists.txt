@@ -1,8 +1,20 @@
 cmake_minimum_required(VERSION 3.10.0)
 
 project(InterpreterProject VERSION 0.1.0 LANGUAGES CXX)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# --- NOWA ZMIANA: Wymuszenie RPATH dla macOS ---
+if(APPLE)
+    # Użyj @loader_path (względny do 'interp') i wskaż na podkatalog 'plugin'
+    set(CMAKE_INSTALL_RPATH "@loader_path/plugin")
+
+    # Mówi CMake, aby UŻYWAŁ powyższej ścieżki RPATH dla celów w katalogu build
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+
+    # Mówi CMake, aby nie dodawał własnych, domyślnych ścieżek RPATH do build tree
+    set(CMAKE_SKIP_BUILD_RPATH FALSE)
+endif()
 
 option(BUILD_IN_DEBUG_MODE "Compile with debug flags" ON)
 
@@ -14,15 +26,33 @@ else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG")
 endif()
 
+# --- ZMIANA: Dodano wyszukiwanie pakietu XercesC ---
+# Musimy znaleźć bibliotekę XercesC, aby móc jej używać
+find_package(XercesC 3.2.0 REQUIRED)
+
 add_subdirectory(plugin)
 
-add_executable(interp src/main.cpp src/ppf.cpp src/LibInterface.cpp)
+# --- ZMIANA: Dodano 'src/xmlinterp.cpp' do listy plików ---
+# Twój nowy plik parsera musi zostać skompilowany i dołączony
+# do głównego pliku wykonywalnego 'interp'.
+add_executable(interp
+    src/main.cpp
+    src/ppf.cpp
+    src/LibInterface.cpp
+    src/xmlinterp.cpp
+    src/PluginManager.cpp
+)
 
 # Dodajemy katalog "inc" do ścieżek include
+# To już tu było i jest poprawne - obsłuży 'Configuration.hh' i 'xmlinterp.hh'
 target_include_directories(interp PUBLIC inc)
 
-# Linkujemy bibliotekę 'dl' (niezbędna do dynamicznego ładowania pluginów)
-target_link_libraries(interp PRIVATE dl)
+# --- ZMIANA: Dodano linkowanie XercesC do celu 'interp' ---
+# Linkujemy 'dl' (dla dlopen) oraz nową bibliotekę 'XercesC'
+target_link_libraries(interp
+    PRIVATE dl
+    PUBLIC XercesC::XercesC # <-- DODANA BIBLIOTEKA
+)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(interp PRIVATE
@@ -38,9 +68,9 @@ endif()
 # --- ZMIANA: Poprawione ustawienie RPATH ---
 # Ustawiamy RPATH tak, aby program 'interp' uruchamiany z katalogu 'build'
 # automatycznie znalazł bibliotekę .so w podkatalogu 'build/plugin'.
-set_target_properties(interp PROPERTIES
-    BUILD_RPATH "${CMAKE_BINARY_DIR}/plugin"
-)
+# set_target_properties(interp PROPERTIES
+# BUILD_RPATH "@loader_path/plugin"
+# )
 
 # -----------------------------------------------------------------------------
 # Integracja z Doxygen
@@ -64,6 +94,17 @@ else()
 endif()
 
 # -----------------------------------------------------------------------------
+
+# --- ZMIANA: Dodano komendę tworzącą symlink do 'config' ---
+# To jest kluczowe, aby Twój program 'interp' (który uruchamiasz z 'build/interp')
+# mógł znaleźć pliki 'config/config.xml' i 'config/config.xsd'.
+# Tworzy link symboliczny: 'build/config' -> '../config'
+add_custom_command(TARGET interp POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+    ${PROJECT_SOURCE_DIR}/config config
+    COMMENT "Creating symlink to config directory"
+    VERBATIM
+)
 
 # -----------------------------------------------------------------------------
 # Ulepszone cele pomocnicze i czyszczące
