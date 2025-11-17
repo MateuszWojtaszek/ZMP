@@ -1,0 +1,21 @@
+// This is a test command file
+#define DO_MOVE 1
+#define DO_ROTATE 1
+#define DO_PAUSE 1
+#define DO_SET 1
+
+#if DO_MOVE
+Move
+#endif
+
+#if DO_ROTATE
+Rotate
+#endif
+
+#if DO_PAUSE
+Pause
+#endif
+
+#if DO_SET
+Set
+#endif

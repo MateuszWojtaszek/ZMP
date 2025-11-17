@@ -1,7 +1,9 @@
 #include <iostream>
+#include <limits>
 #include "AbstractInterp4Command.hh"
 #include "LibInterface.hpp"
 #include "PluginManager.hpp"
+#include "ppf.hpp"
 #include "xmlinterp.hh"
 // instead of using namespace std
 using std::cerr;
@@ -10,22 +12,10 @@ using std::cout;
 using std::endl;
 
 int main() {
-  //! ************** TEST PREPROCESORA **************//
-  // std::istringstream preprocessed_content;
-  // const char* filename = "../src/cpp_test.txt";
-
-  // if (preprocesFile(filename, preprocessed_content)) {
-  //   std::cout << "Wstępnie przetworzona zawartość pliku:\n\n";
-
-  //   // Odczytujemy i wyświetlamy zawartość strumienia
-  //   std::string line;
-  //   while (std::getline(preprocessed_content, line)) {
-  //     std::cout << line << "\n";
-  //   }
-  // }
-  //! ************** TEST PREPROCESORA **************//
-
+  using createCmdFunctionPtr = AbstractInterp4Command* (*)(void);
   Configuration Config;
+  std::string cmdName;
+  std::string objName;
 
   if (!ReadFile("config/config.xml", Config))
     return 1;
@@ -33,44 +23,45 @@ int main() {
   for (auto libNames : Config.getAllLibNames()) {
     manager.addNewPlugin(libNames);
   }
-  // --- ETAP 2: Pętla testująca menedżera ---
-  std::vector<std::string> commandsToTest = {"Move", "Rotate", "Pause", "Set"};
+  std::istringstream preprocessed_content;
+  const char* filename = "../config/opis_dzialan.cmd";
 
-  using createCmdFunctionPtr = AbstractInterp4Command* (*)(void);
+  if (preprocesFile(filename, preprocessed_content)) {
+    std::cout << "Przetworzono komendy przez preprocesor\n";
+  }
+  while (preprocessed_content >> cmdName) {
+    objName = "";
 
-  for (const std::string& cmdName : commandsToTest) {
-    cout << "\n****************************" << endl;
-    cout << "Testowanie polecenia: " << cmdName << endl;
-
-    // 1. Znajdź fabrykę w menedżerze
-    LibInterface* pFactory = manager.getPlugin(cmdName);
-
-    if (pFactory == nullptr) {
+    LibInterface* plugin = manager.getPlugin(cmdName);
+    if (plugin == nullptr) {
       cerr << "!!! BŁĄD: Nie znaleziono wtyczki dla '" << cmdName << "'"
            << endl;
-      continue;  // Przejdź do następnego testu
-    }
-
-    // 2. Pobierz funkcję tworzącą
-    createCmdFunctionPtr pCreateCmd = pFactory->getCreatedCmd();
-    if (pCreateCmd == nullptr) {
-      cerr << "!!! BŁĄD: Fabryka dla '" << cmdName
-           << "' nie ma funkcji CreateCmd!" << endl;
+      preprocessed_content.ignore(std::numeric_limits<std::streamsize>::max(),
+                                  '\n');
       continue;
     }
-
-    // 3. Utwórz instancję polecenia (używając unique_ptr dla bezpieczeństwa)
+    createCmdFunctionPtr pCreateCmd = plugin->getCreatedCmd();
+    if (pCreateCmd == nullptr) {
+      cerr << "!!! Błąd: Plugin: " << cmdName << " nie ma funkcji CreateCmd!";
+      preprocessed_content.ignore(std::numeric_limits<std::streamsize>::max(),
+                                  '\n');
+      continue;
+    }
     std::unique_ptr<AbstractInterp4Command> pCmd(pCreateCmd());
-
-    // 4. Wywołaj metody na poleceniu, aby potwierdzić, że działa
-    cout << "  Nazwa polecenia (z obiektu): " << pCmd->GetCmdName() << endl;
-
-    cout << "  Składnia:" << endl;
-    pCmd->PrintSyntax();
-
-    cout << "  Przykładowe wywołanie:" << endl;
+    if (cmdName != "Pause") {
+      preprocessed_content >> objName;
+    }
+    if (!pCmd->ReadParams(preprocessed_content)) {
+      cerr << "!!! Błąd: Nie udało się wczytać parametrow do wtyczki!";
+      preprocessed_content.ignore(std::numeric_limits<std::streamsize>::max(),
+                                  '\n');
+      continue;
+    }
+    cout << "Wczytano polecenie: " << cmdName << " " << objName << " ";
     pCmd->PrintCmd();
+    preprocessed_content.ignore(
+        std::numeric_limits<std::streamsize>::max(),
+        '\n');  // pominięcie smieci jesli preprocesor cos zostawi
   }
-  cout << "\n--- Zakończono testowanie ---" << endl;
-  return 0;
+  cout << "--- Zakończono przetwarzanie pliku ---" << endl;
 }

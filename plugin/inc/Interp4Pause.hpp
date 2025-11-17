@@ -20,12 +20,7 @@
  *  Klasa modeluj47e ...
  */
 class Interp4Pause : public AbstractInterp4Command {
-  /*
-   *  Tu należy zdefiniować pola, które są niezbędne
-   *  do przechowywania wartości parametrów danego polecenia.
-   *  Ponieżej zdefiniowane jest tylko jedno pole jako przykład.
-   */
-  double _Speed_mmS;
+  double _timeOut;
 
  public:
   /*!

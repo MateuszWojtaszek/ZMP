@@ -1,6 +1,7 @@
 #ifndef COMMAND4ROTATE_HH
 #define COMMAND4ROTATE_HH
-
+#include <istream>
+#include <ostream>
 #ifndef __GNUG__
 #pragma interface
 #pragma implementation
@@ -21,12 +22,13 @@
  *  Klasa modeluj47e ...
  */
 class Interp4Rotate : public AbstractInterp4Command {
-  /*
-   *  Tu należy zdefiniować pola, które są niezbędne
-   *  do przechowywania wartości parametrów danego polecenia.
-   *  Ponieżej zdefiniowane jest tylko jedno pole jako przykład.
-   */
-  double _Speed_mmS;
+ public:
+  enum class Axis { OX, OY, OZ, Unknown };
+
+ private:
+  Axis _Axis;
+  double _Speed_degS;
+  double _Angle_deg;
 
  public:
   /*!
@@ -75,5 +77,25 @@ class Interp4Rotate : public AbstractInterp4Command {
    */
   static AbstractInterp4Command* CreateCmd();
 };
+
+inline std::ostream& operator<<(std::ostream& os, Interp4Rotate::Axis axis) {
+  switch (axis) {
+    case Interp4Rotate::Axis::OX:
+      os << "OX";
+      break;
+    case Interp4Rotate::Axis::OY:
+      os << "OY";
+      break;
+    case Interp4Rotate::Axis::OZ:
+      os << "OZ";
+      break;
+    case Interp4Rotate::Axis::Unknown:
+      os << "Unknown";
+      break;
+  }
+  // Zawsze zwracaj strumień, aby umożliwić łączenie wywołań
+  // (np. cout << _Axis << " dalszy tekst..." << endl;)
+  return os;
+}
 
 #endif

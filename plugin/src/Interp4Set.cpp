@@ -23,16 +23,15 @@ AbstractInterp4Command* CreateCmd(void) {
 /*!
  *
  */
-Interp4Set::Interp4Set() : _Speed_mmS(0) {}
+Interp4Set::Interp4Set() = default;
 
 /*!
  *
  */
 void Interp4Set::PrintCmd() const {
-  /*
-   *  Tu trzeba napisać odpowiednio zmodyfikować kod poniżej.
-   */
-  cout << GetCmdName() << " " << _Speed_mmS << " 10  2" << endl;
+
+  cout << "Set (Params: Trans=" << _TransX << "," << _TransY << "," << _TransZ
+       << " Rot=" << _RotX << "," << _RotY << "," << _RotZ << ")\n";
 }
 
 /*!
@@ -57,10 +56,8 @@ bool Interp4Set::ExecCmd(AbstractScene& rScn, const char* sMobObjName,
  *
  */
 bool Interp4Set::ReadParams(std::istream& Strm_CmdsList) {
-  /*
-   *  Tu trzeba napisać odpowiedni kod.
-   */
-  return true;
+  Strm_CmdsList >> _TransX >> _TransY >> _TransZ >> _RotX >> _RotY >> _RotZ;
+  return !Strm_CmdsList.fail();
 }
 
 /*!
@@ -74,5 +71,5 @@ AbstractInterp4Command* Interp4Set::CreateCmd() {
  *
  */
 void Interp4Set::PrintSyntax() const {
-  cout << "   Set  NazwaObiektu  Szybkosc[m/s]  DlugoscDrogi[m]" << endl;
+  cout << "   Set  NazwaObiektu  Połozenie[x y z]  Rotacja[x y z]" << endl;
 }
