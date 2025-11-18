@@ -57,10 +57,10 @@ bool Interp4Move::ExecCmd(AbstractScene& rScn, const char* sMobObjName,
   // Uwaga: _Speed_mmS w nazwie sugeruje mm/s, ale w zadaniu często jest m/s.
   // Zakładam, że wartosc jest w jednostkach zgodnych ze sceną (metry).
   double velocity = _Speed_mmS;
-  double total_time_s = _Distance / velocity;
+  double total_time_s = std::abs(_Distance / _Speed_mmS);
   int total_frames = std::ceil(total_time_s * FPS);
 
-  double step_dist = _Distance / total_frames;
+  double step_dist = (_Speed_mmS > 0 ? 1 : -1) * (_Distance / total_frames);
 
   for (int i = 0; i < total_frames; ++i) {
     // 1. Pobierz aktualną orientację (w stopniach -> na radiany)

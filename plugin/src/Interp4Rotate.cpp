@@ -52,15 +52,13 @@ bool Interp4Rotate::ExecCmd(AbstractScene& rScn, const char* sMobObjName,
   const int FPS = 50;
   const double step_time_us = 1000000.0 / FPS;
 
-  double total_time_s = _Angle_deg / _Speed_degS;
+  double total_time_s = std::abs(_Angle_deg / _Speed_degS);
   int total_frames = std::ceil(total_time_s * FPS);
+  if (total_frames <= 0)
+    total_frames = 1;
   double step_angle = _Angle_deg / total_frames;
 
   for (int i = 0; i < total_frames; ++i) {
-    // Aktualizujemy odpowiednią oś
-    // _Axis to Twoje pole enum lub int, zależy jak zapisałeś w ReadParams
-    // Zakładam, że _Axis to np. pole tekstowe lub enum.
-    // Tutaj przykład dla prostej logiki:
 
     double currRoll = pObj->GetAng_Roll_deg();
     double currPitch = pObj->GetAng_Pitch_deg();

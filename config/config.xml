@@ -6,65 +6,65 @@
      <Lib Name="libInterp4Set.dylib"/>
   </Plugins>
   <Objects>
-    <Cube Name="Mlyn" Shift="0 0 0" Scale="4.0 1.0 1.0" 
-          RotXYZ_deg="0 0 0" Trans_m="0 0 6.0" RGB="80 80 80"/>
+    <Cube Name="Mlyn" Shift="0 0 0" Scale="4.5 1.0 1.0" RotXYZ_deg="0 0 0" Trans_m="0 0 6.0" RGB="60 60 60"/>
 
-    <Cube Name="Mlyn.NogaL1" Shift="0 0 -0.5" Scale="0.6 0.6 7.0" Trans_m="-1.5 0.4 0" RotXYZ_deg="20 0 0" RGB="120 120 120"/>
-    <Cube Name="Mlyn.NogaL2" Shift="0 0 -0.5" Scale="0.6 0.6 7.0" Trans_m="-1.5 -0.4 0" RotXYZ_deg="-20 0 0" RGB="120 120 120"/>
-    <Cube Name="Mlyn.NogaP1" Shift="0 0 -0.5" Scale="0.6 0.6 7.0" Trans_m="1.5 0.4 0" RotXYZ_deg="20 0 0" RGB="120 120 120"/>
-    <Cube Name="Mlyn.NogaP2" Shift="0 0 -0.5" Scale="0.6 0.6 7.0" Trans_m="1.5 -0.4 0" RotXYZ_deg="-20 0 0" RGB="120 120 120"/>
+    <Cube Name="Mlyn.NogaL1" Shift="0 0 -0.5" Scale="0.8 0.8 7.0" Trans_m="-1.8 0.4 0" RotXYZ_deg="20 0 0" RGB="100 100 100"/>
+    <Cube Name="Mlyn.NogaL2" Shift="0 0 -0.5" Scale="0.8 0.8 7.0" Trans_m="-1.8 -0.4 0" RotXYZ_deg="-20 0 0" RGB="100 100 100"/>
+    <Cube Name="Mlyn.NogaP1" Shift="0 0 -0.5" Scale="0.8 0.8 7.0" Trans_m="1.8 0.4 0" RotXYZ_deg="20 0 0" RGB="100 100 100"/>
+    <Cube Name="Mlyn.NogaP2" Shift="0 0 -0.5" Scale="0.8 0.8 7.0" Trans_m="1.8 -0.4 0" RotXYZ_deg="-20 0 0" RGB="100 100 100"/>
 
+    <Cube Name="Mlyn.NogaL1.Belka" Shift="0 0 0" Scale="0.4 2.5 0.4" Trans_m="0 0 -3.5" RGB="80 80 80"/>
+    <Cube Name="Mlyn.NogaP1.Belka" Shift="0 0 0" Scale="0.4 2.5 0.4" Trans_m="0 0 -3.5" RGB="80 80 80"/>
 
-    <Cube Name="Mlyn.Wirnik" Shift="0 0 0" Scale="1.0 3.0 1.0" Trans_m="0 0 0" RGB="255 255 255"/>
+    <Cube Name="Mlyn.Wirnik" Shift="0 0 0" Scale="1.2 3.5 1.2" Trans_m="0 0 0" RGB="255 255 255"/>
 
+    <Cube Name="Mlyn.Wirnik.R01" Shift="0 0 0.5" Scale="0.2 0.2 4.0" Trans_m="0 0 0" RotXYZ_deg="0 0 0" RGB="220 220 220"/>
+    <Cube Name="Mlyn.Wirnik.R01.Obrecz" Shift="0 0 0" Scale="2.2 0.4 0.3" Trans_m="0 0 4.0" RGB="255 255 255"/>
+    <Cube Name="Mlyn.Wirnik.R01.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 4.0" RotXYZ_deg="0 0 0" RGB="255 0 0"/>
 
-    <Cube Name="Mlyn.Wirnik.R01" Shift="0 0 0.5" Scale="0.2 0.2 3.5" Trans_m="0 0 0" RotXYZ_deg="0 0 0" RGB="220 220 220"/>
-    <Cube Name="Mlyn.Wirnik.R01.Obrecz" Shift="0 0 0" Scale="2.0 0.4 0.2" Trans_m="0 0 3.5" RGB="255 255 255"/>
-    <Cube Name="Mlyn.Wirnik.R01.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 3.5" RGB="255 0 0"/>
+    <Cube Name="Mlyn.Wirnik.R02" Shift="0 0 0.5" Scale="0.2 0.2 4.0" Trans_m="0 0 0" RotXYZ_deg="30 0 0" RGB="220 220 220"/>
+    <Cube Name="Mlyn.Wirnik.R02.Obrecz" Shift="0 0 0" Scale="2.2 0.4 0.3" Trans_m="0 0 4.0" RGB="255 255 255"/>
+    <Cube Name="Mlyn.Wirnik.R02.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 4.0" RotXYZ_deg="-30 0 0" RGB="255 127 0"/>
 
-    <Cube Name="Mlyn.Wirnik.R02" Shift="0 0 0.5" Scale="0.2 0.2 3.5" Trans_m="0 0 0" RotXYZ_deg="30 0 0" RGB="220 220 220"/>
-    <Cube Name="Mlyn.Wirnik.R02.Obrecz" Shift="0 0 0" Scale="2.0 0.4 0.2" Trans_m="0 0 3.5" RGB="255 255 255"/>
-    <Cube Name="Mlyn.Wirnik.R02.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 3.5" RGB="255 127 0"/>
+    <Cube Name="Mlyn.Wirnik.R03" Shift="0 0 0.5" Scale="0.2 0.2 4.0" Trans_m="0 0 0" RotXYZ_deg="60 0 0" RGB="220 220 220"/>
+    <Cube Name="Mlyn.Wirnik.R03.Obrecz" Shift="0 0 0" Scale="2.2 0.4 0.3" Trans_m="0 0 4.0" RGB="255 255 255"/>
+    <Cube Name="Mlyn.Wirnik.R03.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 4.0" RotXYZ_deg="-60 0 0" RGB="255 255 0"/>
 
-    <Cube Name="Mlyn.Wirnik.R03" Shift="0 0 0.5" Scale="0.2 0.2 3.5" Trans_m="0 0 0" RotXYZ_deg="60 0 0" RGB="220 220 220"/>
-    <Cube Name="Mlyn.Wirnik.R03.Obrecz" Shift="0 0 0" Scale="2.0 0.4 0.2" Trans_m="0 0 3.5" RGB="255 255 255"/>
-    <Cube Name="Mlyn.Wirnik.R03.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 3.5" RGB="255 255 0"/>
+    <Cube Name="Mlyn.Wirnik.R04" Shift="0 0 0.5" Scale="0.2 0.2 4.0" Trans_m="0 0 0" RotXYZ_deg="90 0 0" RGB="220 220 220"/>
+    <Cube Name="Mlyn.Wirnik.R04.Obrecz" Shift="0 0 0" Scale="2.2 0.4 0.3" Trans_m="0 0 4.0" RGB="255 255 255"/>
+    <Cube Name="Mlyn.Wirnik.R04.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 4.0" RotXYZ_deg="-90 0 0" RGB="127 255 0"/>
 
-    <Cube Name="Mlyn.Wirnik.R04" Shift="0 0 0.5" Scale="0.2 0.2 3.5" Trans_m="0 0 0" RotXYZ_deg="90 0 0" RGB="220 220 220"/>
-    <Cube Name="Mlyn.Wirnik.R04.Obrecz" Shift="0 0 0" Scale="2.0 0.4 0.2" Trans_m="0 0 3.5" RGB="255 255 255"/>
-    <Cube Name="Mlyn.Wirnik.R04.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 3.5" RGB="127 255 0"/>
+    <Cube Name="Mlyn.Wirnik.R05" Shift="0 0 0.5" Scale="0.2 0.2 4.0" Trans_m="0 0 0" RotXYZ_deg="120 0 0" RGB="220 220 220"/>
+    <Cube Name="Mlyn.Wirnik.R05.Obrecz" Shift="0 0 0" Scale="2.2 0.4 0.3" Trans_m="0 0 4.0" RGB="255 255 255"/>
+    <Cube Name="Mlyn.Wirnik.R05.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 4.0" RotXYZ_deg="-120 0 0" RGB="0 255 0"/>
 
-    <Cube Name="Mlyn.Wirnik.R05" Shift="0 0 0.5" Scale="0.2 0.2 3.5" Trans_m="0 0 0" RotXYZ_deg="120 0 0" RGB="220 220 220"/>
-    <Cube Name="Mlyn.Wirnik.R05.Obrecz" Shift="0 0 0" Scale="2.0 0.4 0.2" Trans_m="0 0 3.5" RGB="255 255 255"/>
-    <Cube Name="Mlyn.Wirnik.R05.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 3.5" RGB="0 255 0"/>
+    <Cube Name="Mlyn.Wirnik.R06" Shift="0 0 0.5" Scale="0.2 0.2 4.0" Trans_m="0 0 0" RotXYZ_deg="150 0 0" RGB="220 220 220"/>
+    <Cube Name="Mlyn.Wirnik.R06.Obrecz" Shift="0 0 0" Scale="2.2 0.4 0.3" Trans_m="0 0 4.0" RGB="255 255 255"/>
+    <Cube Name="Mlyn.Wirnik.R06.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 4.0" RotXYZ_deg="-150 0 0" RGB="0 255 127"/>
 
-    <Cube Name="Mlyn.Wirnik.R06" Shift="0 0 0.5" Scale="0.2 0.2 3.5" Trans_m="0 0 0" RotXYZ_deg="150 0 0" RGB="220 220 220"/>
-    <Cube Name="Mlyn.Wirnik.R06.Obrecz" Shift="0 0 0" Scale="2.0 0.4 0.2" Trans_m="0 0 3.5" RGB="255 255 255"/>
-    <Cube Name="Mlyn.Wirnik.R06.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 3.5" RGB="0 255 127"/>
+    <Cube Name="Mlyn.Wirnik.R07" Shift="0 0 0.5" Scale="0.2 0.2 4.0" Trans_m="0 0 0" RotXYZ_deg="180 0 0" RGB="220 220 220"/>
+    <Cube Name="Mlyn.Wirnik.R07.Obrecz" Shift="0 0 0" Scale="2.2 0.4 0.3" Trans_m="0 0 4.0" RGB="255 255 255"/>
+    <Cube Name="Mlyn.Wirnik.R07.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 4.0" RotXYZ_deg="-180 0 0" RGB="0 255 255"/>
 
-    <Cube Name="Mlyn.Wirnik.R07" Shift="0 0 0.5" Scale="0.2 0.2 3.5" Trans_m="0 0 0" RotXYZ_deg="180 0 0" RGB="220 220 220"/>
-    <Cube Name="Mlyn.Wirnik.R07.Obrecz" Shift="0 0 0" Scale="2.0 0.4 0.2" Trans_m="0 0 3.5" RGB="255 255 255"/>
-    <Cube Name="Mlyn.Wirnik.R07.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 3.5" RGB="0 255 255"/>
+    <Cube Name="Mlyn.Wirnik.R08" Shift="0 0 0.5" Scale="0.2 0.2 4.0" Trans_m="0 0 0" RotXYZ_deg="210 0 0" RGB="220 220 220"/>
+    <Cube Name="Mlyn.Wirnik.R08.Obrecz" Shift="0 0 0" Scale="2.2 0.4 0.3" Trans_m="0 0 4.0" RGB="255 255 255"/>
+    <Cube Name="Mlyn.Wirnik.R08.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 4.0" RotXYZ_deg="-210 0 0" RGB="0 127 255"/>
 
-    <Cube Name="Mlyn.Wirnik.R08" Shift="0 0 0.5" Scale="0.2 0.2 3.5" Trans_m="0 0 0" RotXYZ_deg="210 0 0" RGB="220 220 220"/>
-    <Cube Name="Mlyn.Wirnik.R08.Obrecz" Shift="0 0 0" Scale="2.0 0.4 0.2" Trans_m="0 0 3.5" RGB="255 255 255"/>
-    <Cube Name="Mlyn.Wirnik.R08.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 3.5" RGB="0 127 255"/>
+    <Cube Name="Mlyn.Wirnik.R09" Shift="0 0 0.5" Scale="0.2 0.2 4.0" Trans_m="0 0 0" RotXYZ_deg="240 0 0" RGB="220 220 220"/>
+    <Cube Name="Mlyn.Wirnik.R09.Obrecz" Shift="0 0 0" Scale="2.2 0.4 0.3" Trans_m="0 0 4.0" RGB="255 255 255"/>
+    <Cube Name="Mlyn.Wirnik.R09.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 4.0" RotXYZ_deg="-240 0 0" RGB="0 0 255"/>
 
-    <Cube Name="Mlyn.Wirnik.R09" Shift="0 0 0.5" Scale="0.2 0.2 3.5" Trans_m="0 0 0" RotXYZ_deg="240 0 0" RGB="220 220 220"/>
-    <Cube Name="Mlyn.Wirnik.R09.Obrecz" Shift="0 0 0" Scale="2.0 0.4 0.2" Trans_m="0 0 3.5" RGB="255 255 255"/>
-    <Cube Name="Mlyn.Wirnik.R09.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 3.5" RGB="0 0 255"/>
+    <Cube Name="Mlyn.Wirnik.R10" Shift="0 0 0.5" Scale="0.2 0.2 4.0" Trans_m="0 0 0" RotXYZ_deg="270 0 0" RGB="220 220 220"/>
+    <Cube Name="Mlyn.Wirnik.R10.Obrecz" Shift="0 0 0" Scale="2.2 0.4 0.3" Trans_m="0 0 4.0" RGB="255 255 255"/>
+    <Cube Name="Mlyn.Wirnik.R10.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 4.0" RotXYZ_deg="-270 0 0" RGB="127 0 255"/>
 
-    <Cube Name="Mlyn.Wirnik.R10" Shift="0 0 0.5" Scale="0.2 0.2 3.5" Trans_m="0 0 0" RotXYZ_deg="270 0 0" RGB="220 220 220"/>
-    <Cube Name="Mlyn.Wirnik.R10.Obrecz" Shift="0 0 0" Scale="2.0 0.4 0.2" Trans_m="0 0 3.5" RGB="255 255 255"/>
-    <Cube Name="Mlyn.Wirnik.R10.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 3.5" RGB="127 0 255"/>
+    <Cube Name="Mlyn.Wirnik.R11" Shift="0 0 0.5" Scale="0.2 0.2 4.0" Trans_m="0 0 0" RotXYZ_deg="300 0 0" RGB="220 220 220"/>
+    <Cube Name="Mlyn.Wirnik.R11.Obrecz" Shift="0 0 0" Scale="2.2 0.4 0.3" Trans_m="0 0 4.0" RGB="255 255 255"/>
+    <Cube Name="Mlyn.Wirnik.R11.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 4.0" RotXYZ_deg="-300 0 0" RGB="255 0 255"/>
 
-    <Cube Name="Mlyn.Wirnik.R11" Shift="0 0 0.5" Scale="0.2 0.2 3.5" Trans_m="0 0 0" RotXYZ_deg="300 0 0" RGB="220 220 220"/>
-    <Cube Name="Mlyn.Wirnik.R11.Obrecz" Shift="0 0 0" Scale="2.0 0.4 0.2" Trans_m="0 0 3.5" RGB="255 255 255"/>
-    <Cube Name="Mlyn.Wirnik.R11.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 3.5" RGB="255 0 255"/>
-
-    <Cube Name="Mlyn.Wirnik.R12" Shift="0 0 0.5" Scale="0.2 0.2 3.5" Trans_m="0 0 0" RotXYZ_deg="330 0 0" RGB="220 220 220"/>
-    <Cube Name="Mlyn.Wirnik.R12.Obrecz" Shift="0 0 0" Scale="2.0 0.4 0.2" Trans_m="0 0 3.5" RGB="255 255 255"/>
-    <Cube Name="Mlyn.Wirnik.R12.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 3.5" RGB="255 0 127"/>
+    <Cube Name="Mlyn.Wirnik.R12" Shift="0 0 0.5" Scale="0.2 0.2 4.0" Trans_m="0 0 0" RotXYZ_deg="330 0 0" RGB="220 220 220"/>
+    <Cube Name="Mlyn.Wirnik.R12.Obrecz" Shift="0 0 0" Scale="2.2 0.4 0.3" Trans_m="0 0 4.0" RGB="255 255 255"/>
+    <Cube Name="Mlyn.Wirnik.R12.Gon" Shift="0 0 -0.5" Scale="1.0 0.8 1.0" Trans_m="0 0 4.0" RotXYZ_deg="-330 0 0" RGB="255 0 127"/>
 
   </Objects>
 </Config>
