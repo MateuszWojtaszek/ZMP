@@ -40,7 +40,7 @@ int main() {
     manager.addNewPlugin(libNames);
   }
   std::istringstream preprocessed_content;
-  const char* filename = "../config/opis_dzialan.cmd";
+  const char* filename = "../config/test_bujania.cmd";
 
   if (preprocesFile(filename, preprocessed_content)) {
     std::cout << "Przetworzono komendy przez preprocesor\n";
