@@ -1,6 +1,9 @@
+#include <functional>
 #include <iostream>
 #include <limits>
+#include <memory>
 #include <sstream>
+#include <thread>
 #include <vector>
 #include "AbstractInterp4Command.hh"
 #include "ComChannel.hpp"
@@ -16,6 +19,10 @@ using std::cerr;
 using std::cin;
 using std::cout;
 using std::endl;
+struct ThreadTask {
+  std::unique_ptr<AbstractInterp4Command> pCmd;
+  std::string objName;
+};
 
 int main() {
   using createCmdFunctionPtr = AbstractInterp4Command* (*)(void);
@@ -24,6 +31,8 @@ int main() {
   std::string objName;
   PluginManager manager;
   ComChannel channel;
+  bool inParallel = false;
+  std::vector<ThreadTask> tasks;
   if (!ReadFile("config/config.xml", Config))
     return 1;
 
@@ -76,37 +85,70 @@ int main() {
   }
 
   while (preprocessed_content >> cmdName) {
-    objName = "";
-
-    LibInterface* plugin = manager.getPlugin(cmdName);
-    if (plugin == nullptr) {
-      cerr << "!!! BŁĄD: Nie znaleziono wtyczki dla '" << cmdName << "'"
+    if (cmdName == "Begin_Parallel_Actions") {
+      inParallel = true;
+    } else if (cmdName == "End_Parallel_Actions") {
+      inParallel = false;
+      cout << "--- Startuje blok rownolegly (" << tasks.size() << " watkow) ---"
            << endl;
-      preprocessed_content.ignore(std::numeric_limits<std::streamsize>::max(),
-                                  '\n');
-      continue;
-    }
-    createCmdFunctionPtr pCreateCmd = plugin->getCreatedCmd();
-    if (pCreateCmd == nullptr) {
-      cerr << "!!! Błąd: Plugin: " << cmdName << " nie ma funkcji CreateCmd!";
-      preprocessed_content.ignore(std::numeric_limits<std::streamsize>::max(),
-                                  '\n');
-      continue;
-    }
-    std::unique_ptr<AbstractInterp4Command> pCmd(pCreateCmd());
-    if (cmdName != "Pause") {
-      preprocessed_content >> objName;
-    }
-    if (!pCmd->ReadParams(preprocessed_content)) {
-      cerr << "!!! Błąd: Nie udało się wczytać parametrow do wtyczki!";
-      preprocessed_content.ignore(std::numeric_limits<std::streamsize>::max(),
-                                  '\n');
-      continue;
-    }
-    cout << "Wczytano polecenie: " << cmdName << " " << objName << " ";
-    pCmd->PrintCmd();
-    if (!pCmd->ExecCmd(scene, objName.c_str(), channel)) {
-      cerr << "!!! Błąd podczas wykonywania polecenia: " << cmdName << endl;
+      std::vector<std::thread> threads;  // tworze wektor wątkow
+      // 1. Uruchamianie watkow
+      for (const auto& task : tasks) {
+        // przekazuje zadanie, scene i kanal
+        threads.emplace_back([&task, &scene, &channel]() {
+          // Wypisanie info (opcjonalnie, z mutexem na cout byloby bezpieczniej)
+          // task.pCmd->PrintCmd();
+
+          // Wykonanie wlasciwej komendy w watku
+          if (!task.pCmd->ExecCmd(scene, task.objName.c_str(), channel)) {
+            cerr << "!!! Blad w watku dla obiektu: " << task.objName << endl;
+          }
+        });
+      }
+      for (auto& th : threads) {
+        if (th.joinable()) {
+          th.join();
+        }
+      }
+      tasks.clear();
+      cout << "--- Koniec bloku rownoleglego ---" << endl;
+    } else {
+      objName = "";
+
+      LibInterface* plugin = manager.getPlugin(cmdName);
+      if (plugin == nullptr) {
+        cerr << "!!! BŁĄD: Nie znaleziono wtyczki dla '" << cmdName << "'"
+             << endl;
+        preprocessed_content.ignore(std::numeric_limits<std::streamsize>::max(),
+                                    '\n');
+        continue;
+      }
+      createCmdFunctionPtr pCreateCmd = plugin->getCreatedCmd();
+      if (pCreateCmd == nullptr) {
+        cerr << "!!! Błąd: Plugin: " << cmdName << " nie ma funkcji CreateCmd!";
+        preprocessed_content.ignore(std::numeric_limits<std::streamsize>::max(),
+                                    '\n');
+        continue;
+      }
+      std::unique_ptr<AbstractInterp4Command> pCmd(pCreateCmd());
+      if (cmdName != "Pause") {
+        preprocessed_content >> objName;
+      }
+      if (!pCmd->ReadParams(preprocessed_content)) {
+        cerr << "!!! Błąd: Nie udało się wczytać parametrow do wtyczki!";
+        preprocessed_content.ignore(std::numeric_limits<std::streamsize>::max(),
+                                    '\n');
+        continue;
+      }
+      if (inParallel == true) {
+        tasks.push_back({std::move(pCmd), objName});
+      } else {
+        cout << "Wczytano polecenie: " << cmdName << " " << objName << " ";
+        pCmd->PrintCmd();
+        if (!pCmd->ExecCmd(scene, objName.c_str(), channel)) {
+          cerr << "!!! Błąd podczas wykonywania polecenia: " << cmdName << endl;
+        }
+      }
     }
     preprocessed_content.ignore(
         std::numeric_limits<std::streamsize>::max(),

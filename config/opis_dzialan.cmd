@@ -1,77 +1,46 @@
-#define V_WOLNO   10   /* Prędkość koła */
-#define V_SZYBKO  100  /* Prędkość korekty (musi być szybka) */
-
-/* 1. Start - chwila na załadowanie widoku */
-Pause 1000
-
-/* === KROK 1: Obrót o 10 stopni === */
-Rotate Mlyn.Wirnik OX V_WOLNO 10
-
-/* KOREKTA: Wszystkie gondole wracają do pionu (-10) */
-/* Jeśli naprawiłeś kod, to ten ruch powinien być szybki i skuteczny */
-Rotate Mlyn.Wirnik.R01.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R02.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R03.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R04.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R05.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R06.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R07.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R08.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R09.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R10.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R11.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R12.Gon OX V_SZYBKO -10
-Pause 200
-
-/* === KROK 2: Kolejne 10 stopni (Razem 20) === */
-Rotate Mlyn.Wirnik OX V_WOLNO 10
-
-Rotate Mlyn.Wirnik.R01.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R02.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R03.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R04.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R05.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R06.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R07.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R08.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R09.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R10.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R11.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R12.Gon OX V_SZYBKO -10
-Pause 200
-
-/* === KROK 3: Kolejne 10 stopni (Razem 30) === */
-Rotate Mlyn.Wirnik OX V_WOLNO 10
-
-Rotate Mlyn.Wirnik.R01.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R02.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R03.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R04.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R05.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R06.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R07.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R08.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R09.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R10.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R11.Gon OX V_SZYBKO -10
-Rotate Mlyn.Wirnik.R12.Gon OX V_SZYBKO -10
-Pause 200
-
-/* === KROK 4: Większy skok na koniec (30 stopni) === */
-Rotate Mlyn.Wirnik OX V_WOLNO 30
-
-/* Korekta o -30 */
-Rotate Mlyn.Wirnik.R01.Gon OX V_SZYBKO -30
-Rotate Mlyn.Wirnik.R02.Gon OX V_SZYBKO -30
-Rotate Mlyn.Wirnik.R03.Gon OX V_SZYBKO -30
-Rotate Mlyn.Wirnik.R04.Gon OX V_SZYBKO -30
-Rotate Mlyn.Wirnik.R05.Gon OX V_SZYBKO -30
-Rotate Mlyn.Wirnik.R06.Gon OX V_SZYBKO -30
-Rotate Mlyn.Wirnik.R07.Gon OX V_SZYBKO -30
-Rotate Mlyn.Wirnik.R08.Gon OX V_SZYBKO -30
-Rotate Mlyn.Wirnik.R09.Gon OX V_SZYBKO -30
-Rotate Mlyn.Wirnik.R10.Gon OX V_SZYBKO -30
-Rotate Mlyn.Wirnik.R11.Gon OX V_SZYBKO -30
-Rotate Mlyn.Wirnik.R12.Gon OX V_SZYBKO -30
+#define V_WIRNIK 20  /* Wolny obrót koła */
+#define V_GONDOLA 20 /* Taka sama prędkość korekty (żeby idealnie kontrować) */
 
 Pause 1000
+
+/* === START: PEŁNA SYNCHRONIZACJA === */
+/* Wątki sprawią, że to wszystko ruszy NA RAZ */
+
+Begin_Parallel_Actions
+  /* 1. Wątek główny: Kręcimy kołem o 90 stopni */
+  Rotate Mlyn.Wirnik OX V_WIRNIK 90
+  
+  /* 2. Wątki poboczne: 12 gondoli kontruje obrót o -90 stopni */
+  Rotate Mlyn.Wirnik.R01.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R02.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R03.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R04.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R05.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R06.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R07.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R08.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R09.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R10.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R11.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R12.Gon OX V_GONDOLA -90
+End_Parallel_Actions
+
+/* Krótka przerwa na podziwianie efektu */
+Pause 500
+
+/* === POWRÓT (Druga ćwiartka) === */
+Begin_Parallel_Actions
+  Rotate Mlyn.Wirnik OX V_WIRNIK 90
+  Rotate Mlyn.Wirnik.R01.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R02.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R03.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R04.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R05.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R06.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R07.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R08.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R09.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R10.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R11.Gon OX V_GONDOLA -90
+  Rotate Mlyn.Wirnik.R12.Gon OX V_GONDOLA -90
+End_Parallel_Actions

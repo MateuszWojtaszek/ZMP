@@ -63,6 +63,7 @@ bool Interp4Move::ExecCmd(AbstractScene& rScn, const char* sMobObjName,
   double step_dist = (_Speed_mmS > 0 ? 1 : -1) * (_Distance / total_frames);
 
   for (int i = 0; i < total_frames; ++i) {
+    pObj->LockAccess();
     // 1. Pobierz aktualną orientację (w stopniach -> na radiany)
     double roll = pObj->GetAng_Roll_deg() * M_PI / 180.0;
     double pitch = pObj->GetAng_Pitch_deg() * M_PI / 180.0;
@@ -101,6 +102,7 @@ bool Interp4Move::ExecCmd(AbstractScene& rScn, const char* sMobObjName,
       total_sent += sent;
     }
     rComChann.UnlockAccess();
+    pObj->UnlockAccess();
 
     // 5. Czekaj
     usleep(static_cast<useconds_t>(step_time_us));

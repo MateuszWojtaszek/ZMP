@@ -1,4 +1,5 @@
 #pragma once
+#include <mutex>
 #include <string>
 #include "AbstractMobileObj.hh"
 
@@ -6,9 +7,14 @@ class MobileObj : public AbstractMobileObj {
   std::string _Name;
   Vector3D _Position_m, _Scale, _RGB, _Shift;
   double _Ang_Roll_deg{0.0}, _Ang_Pitch_deg{0.0}, _Ang_Yaw_deg{0.0};
+  std::mutex _mutex;
 
  public:
   MobileObj();
+  MobileObj(const MobileObj&) = delete;
+  MobileObj& operator=(const MobileObj&) = delete;
+  void LockAccess() override { _mutex.lock(); }
+  void UnlockAccess() override { _mutex.unlock(); }
   /* SETTERY */
   void SetPosition_m(const Vector3D& rPos) override { _Position_m = rPos; }
   void SetName(const char* sName) override { _Name = sName; }

@@ -54,6 +54,7 @@ bool Interp4Set::ExecCmd(AbstractScene& rScn, const char* sMobObjName,
   }
 
   // 2. Zaktualizuj parametry lokalne obiektu
+  pObj->LockAccess();
   Vector3D newPos;
   newPos[0] = _TransX;
   newPos[1] = _TransY;
@@ -86,6 +87,7 @@ bool Interp4Set::ExecCmd(AbstractScene& rScn, const char* sMobObjName,
     total_sent += sent;
   }
   rComChann.UnlockAccess();
+  pObj->UnlockAccess();
 
   return true;
 }

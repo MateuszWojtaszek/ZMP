@@ -59,6 +59,7 @@ bool Interp4Rotate::ExecCmd(AbstractScene& rScn, const char* sMobObjName,
   double step_angle = _Angle_deg / total_frames;
 
   for (int i = 0; i < total_frames; ++i) {
+    pObj->LockAccess();
 
     double currRoll = pObj->GetAng_Roll_deg();
     double currPitch = pObj->GetAng_Pitch_deg();
@@ -93,6 +94,7 @@ bool Interp4Rotate::ExecCmd(AbstractScene& rScn, const char* sMobObjName,
       total_sent += sent;
     }
     rComChann.UnlockAccess();
+    pObj->UnlockAccess();
 
     usleep(static_cast<useconds_t>(step_time_us));
   }

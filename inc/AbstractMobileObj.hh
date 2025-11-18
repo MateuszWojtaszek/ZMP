@@ -99,6 +99,7 @@ class AbstractMobileObj {
         *  \return Nazwa obiektu.
         */
   virtual const std::string& GetName() const = 0;
+  virtual void LockAccess() = 0;
+  virtual void UnlockAccess() = 0;
 };
-
 #endif
