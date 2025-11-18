@@ -6,8 +6,10 @@
 #pragma implementation
 #endif
 
+#include <unistd.h>
+#include <cmath>
+#include <sstream>
 #include "AbstractInterp4Command.hh"
-
 /*!
  * \file
  * \brief Definicja klasy Interp4Move

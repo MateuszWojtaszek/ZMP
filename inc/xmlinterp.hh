@@ -22,7 +22,10 @@ bool ReadFile(const char* sFileName, Configuration& rConfig);
  * Klasa zawiera zestaw metod, które wywoływane są w trakcie czytania i analizy
  * pliku XML.
  */
+
+bool ParseVector3D(const std::string& rStr, const Vector3D& rVec);
 class XMLInterp4Config : public xercesc::DefaultHandler {
+
  public:
   /*!
     * \brief Inicjalizuje obiekt i kojarzy go z listą poleceń robota

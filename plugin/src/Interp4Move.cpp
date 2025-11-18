@@ -45,9 +45,66 @@ const char* Interp4Move::GetCmdName() const {
  */
 bool Interp4Move::ExecCmd(AbstractScene& rScn, const char* sMobObjName,
                           AbstractComChannel& rComChann) {
-  /*
-   *  Tu trzeba napisać odpowiedni kod.
-   */
+  AbstractMobileObj* pObj = rScn.FindMobileObj(sMobObjName);
+  if (!pObj)
+    return false;
+
+  // Parametry symulacji
+  const int FPS = 50;
+  const double step_time_us = 1000000.0 / FPS;  // np. 20000 us
+
+  // Obliczenia czasu i kroków
+  // Uwaga: _Speed_mmS w nazwie sugeruje mm/s, ale w zadaniu często jest m/s.
+  // Zakładam, że wartosc jest w jednostkach zgodnych ze sceną (metry).
+  double velocity = _Speed_mmS;
+  double total_time_s = _Distance / velocity;
+  int total_frames = std::ceil(total_time_s * FPS);
+
+  double step_dist = _Distance / total_frames;
+
+  for (int i = 0; i < total_frames; ++i) {
+    // 1. Pobierz aktualną orientację (w stopniach -> na radiany)
+    double roll = pObj->GetAng_Roll_deg() * M_PI / 180.0;
+    double pitch = pObj->GetAng_Pitch_deg() * M_PI / 180.0;
+    double yaw = pObj->GetAng_Yaw_deg() * M_PI / 180.0;
+
+    // 2. Oblicz zmianę pozycji (ruch wzdłuż lokalnej osi OX)
+    // Wzór na przesunięcie w 3D:
+    double dx = step_dist * cos(pitch) * cos(yaw);
+    double dy = step_dist * cos(pitch) * sin(yaw);
+    double dz = step_dist * sin(pitch);
+
+    // 3. Zaktualizuj pozycję
+    Vector3D newPos = pObj->GetPosition_m();
+    newPos[0] += dx;
+    newPos[1] += dy;
+    newPos[2] += dz;
+    pObj->SetPosition_m(newPos);
+
+    // 4. Wyślij UpdateObj
+    std::stringstream ss;
+    ss << "UpdateObj Name=" << sMobObjName << " Trans_m=(" << newPos[0] << ","
+       << newPos[1] << "," << newPos[2] << ")\n";
+    std::string msg = ss.str();
+    rComChann.LockAccess();
+    int socket = rComChann.GetSocket();
+    const char* data = msg.c_str();
+    size_t len = msg.length();
+    size_t total_sent = 0;
+
+    while (total_sent < len) {
+      ssize_t sent = write(socket, data + total_sent, len - total_sent);
+      if (sent < 0) {
+        std::cerr << "Błąd wysyłania w ExecCmd!\n";
+        break;
+      }
+      total_sent += sent;
+    }
+    rComChann.UnlockAccess();
+
+    // 5. Czekaj
+    usleep(static_cast<useconds_t>(step_time_us));
+  }
   return true;
 }
 

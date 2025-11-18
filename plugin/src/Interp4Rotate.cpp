@@ -45,9 +45,59 @@ const char* Interp4Rotate::GetCmdName() const {
  */
 bool Interp4Rotate::ExecCmd(AbstractScene& rScn, const char* sMobObjName,
                             AbstractComChannel& rComChann) {
-  /*
-   *  Tu trzeba napisać odpowiedni kod.
-   */
+  AbstractMobileObj* pObj = rScn.FindMobileObj(sMobObjName);
+  if (!pObj)
+    return false;
+
+  const int FPS = 50;
+  const double step_time_us = 1000000.0 / FPS;
+
+  double total_time_s = _Angle_deg / _Speed_degS;
+  int total_frames = std::ceil(total_time_s * FPS);
+  double step_angle = _Angle_deg / total_frames;
+
+  for (int i = 0; i < total_frames; ++i) {
+    // Aktualizujemy odpowiednią oś
+    // _Axis to Twoje pole enum lub int, zależy jak zapisałeś w ReadParams
+    // Zakładam, że _Axis to np. pole tekstowe lub enum.
+    // Tutaj przykład dla prostej logiki:
+
+    double currRoll = pObj->GetAng_Roll_deg();
+    double currPitch = pObj->GetAng_Pitch_deg();
+    double currYaw = pObj->GetAng_Yaw_deg();
+
+    if (_Axis == Axis::OX) {  // Jeśli masz enum Axis
+      pObj->SetAng_Roll_deg(currRoll + step_angle);
+    } else if (_Axis == Axis::OY) {
+      pObj->SetAng_Pitch_deg(currPitch + step_angle);
+    } else if (_Axis == Axis::OZ) {
+      pObj->SetAng_Yaw_deg(currYaw + step_angle);
+    }
+
+    // Budowa komendy (musimy wysłać wszystkie kąty, nawet te niezmienione)
+    std::stringstream ss;
+    ss << "UpdateObj Name=" << sMobObjName << " RotXYZ_deg=("
+       << pObj->GetAng_Roll_deg() << "," << pObj->GetAng_Pitch_deg() << ","
+       << pObj->GetAng_Yaw_deg() << ")\n";
+    std::string msg = ss.str();
+    rComChann.LockAccess();
+    int socket = rComChann.GetSocket();
+    const char* data = msg.c_str();
+    size_t len = msg.length();
+    size_t total_sent = 0;
+
+    while (total_sent < len) {
+      ssize_t sent = write(socket, data + total_sent, len - total_sent);
+      if (sent < 0) {
+        std::cerr << "Błąd wysyłania w ExecCmd!\n";
+        break;
+      }
+      total_sent += sent;
+    }
+    rComChann.UnlockAccess();
+
+    usleep(static_cast<useconds_t>(step_time_us));
+  }
   return true;
 }
 

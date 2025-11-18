@@ -46,9 +46,47 @@ const char* Interp4Set::GetCmdName() const {
  */
 bool Interp4Set::ExecCmd(AbstractScene& rScn, const char* sMobObjName,
                          AbstractComChannel& rComChann) {
-  /*
-   *  Tu trzeba napisać odpowiedni kod.
-   */
+  // 1. Znajdź obiekt na scenie
+  AbstractMobileObj* pObj = rScn.FindMobileObj(sMobObjName);
+  if (!pObj) {
+    std::cerr << "Błąd: Nie znaleziono obiektu: " << sMobObjName << std::endl;
+    return false;
+  }
+
+  // 2. Zaktualizuj parametry lokalne obiektu
+  Vector3D newPos;
+  newPos[0] = _TransX;
+  newPos[1] = _TransY;
+  newPos[2] = _TransZ;
+
+  pObj->SetPosition_m(newPos);
+  pObj->SetAng_Roll_deg(_RotX);
+  pObj->SetAng_Pitch_deg(_RotY);
+  pObj->SetAng_Yaw_deg(_RotZ);
+
+  // 3. Wyślij komendę UpdateObj do serwera
+  std::stringstream ss;
+  ss << "UpdateObj Name=" << sMobObjName << " Trans_m=(" << _TransX << ","
+     << _TransY << "," << _TransZ << ")"
+     << " RotXYZ_deg=(" << _RotX << "," << _RotY << "," << _RotZ << ")\n";
+  std::string msg = ss.str();
+  // Sekcja krytyczna dla wysyłania
+  rComChann.LockAccess();
+  int socket = rComChann.GetSocket();
+  const char* data = msg.c_str();
+  size_t len = msg.length();
+  size_t total_sent = 0;
+
+  while (total_sent < len) {
+    ssize_t sent = write(socket, data + total_sent, len - total_sent);
+    if (sent < 0) {
+      std::cerr << "Błąd wysyłania w ExecCmd!\n";
+      break;
+    }
+    total_sent += sent;
+  }
+  rComChann.UnlockAccess();
+
   return true;
 }
 

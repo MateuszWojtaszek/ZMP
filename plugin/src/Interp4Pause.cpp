@@ -29,9 +29,6 @@ Interp4Pause::Interp4Pause() = default;
  *
  */
 void Interp4Pause::PrintCmd() const {
-  /*
-   *  Tu trzeba napisać odpowiednio zmodyfikować kod poniżej.
-   */
   cout << "Pause: czas oczekiwania: " << _timeOut << "\n";
 }
 
@@ -47,9 +44,7 @@ const char* Interp4Pause::GetCmdName() const {
  */
 bool Interp4Pause::ExecCmd(AbstractScene& rScn, const char* sMobObjName,
                            AbstractComChannel& rComChann) {
-  /*
-   *  Tu trzeba napisać odpowiedni kod.
-   */
+  usleep(_timeOut * 1000);
   return true;
 }
 

@@ -6,8 +6,8 @@
 #pragma implementation
 #endif
 
+#include <unistd.h>
 #include "AbstractInterp4Command.hh"
-
 /*!Pauseile
  * \brief Definicja klasy Interp4Pause
  *

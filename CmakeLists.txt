@@ -41,6 +41,9 @@ add_executable(interp
     src/LibInterface.cpp
     src/xmlinterp.cpp
     src/PluginManager.cpp
+    src/MobileObj.cpp
+    src/Scene.cpp
+    src/ComChannel.cpp
 )
 
 # Dodajemy katalog "inc" do ścieżek include
